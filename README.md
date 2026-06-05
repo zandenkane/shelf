@@ -21,6 +21,12 @@ pip install -e ".[dev]"
 Requires Python 3.10+.
 
 
+
+<p align="center">
+  <img src="assets/crdt_sync.png" alt="how CRDT sync works" width="90%">
+</p>
+
+
 ## example
 
 ```
