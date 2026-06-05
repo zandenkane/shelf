@@ -1,6 +1,12 @@
-# shelf
+<p align="center">
+  <img src="assets/banner.png" alt="shelf" width="100%">
+</p>
 
-![CI](https://github.com/zandenkane/shelf/actions/workflows/ci.yml/badge.svg)
+<p align="center">
+  <a href="https://github.com/zandenkane/shelf/actions/workflows/ci.yml"><img src="https://github.com/zandenkane/shelf/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/python-3776AB?style=flat&logo=python&logoColor=white" alt="python">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
+</p>
 
 A CLI database that stores tables as CRDTs so multiple peers can edit the same data offline and merge without conflicts. Built on pycrdt (Yrs), persisted in SQLite, synced over TCP.
 
