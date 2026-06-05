@@ -14,6 +14,38 @@ pip install -e ".[dev]"
 
 Requires Python 3.10+.
 
+
+## example
+
+```
+$ shelf create inventory
+created table: inventory (0 rows)
+
+$ shelf insert inventory name="drill" owner="alex" available=true
+$ shelf insert inventory name="ladder" owner="sam" available=true
+$ shelf insert inventory name="projector" owner="alex" available=false
+
+$ shelf query inventory
+name        owner   available
+drill       alex    true
+ladder      sam     true
+projector   alex    false
+(3 rows)
+
+$ shelf sync --peer 192.168.1.42:9876
+syncing with 192.168.1.42:9876...
+received 2 remote changes, sent 3 local changes
+merged without conflicts (CRDT)
+```
+
+```mermaid
+graph TD
+    A[Peer A edits offline] --> C[CRDT merge]
+    B[Peer B edits offline] --> C
+    C --> D[Conflict-free merged state]
+    D --> E[(SQLite on each peer)]
+```
+
 ## Quick Start
 
 ### Create a table
