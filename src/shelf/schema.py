@@ -96,6 +96,7 @@ def coerce_value(value: Any, col_type: ColumnType) -> Any:
 
     Strings from CLI input are coerced to the target type. Values that are
     already the right type pass through unchanged.
+    """
     if value is None:
         return None
 
@@ -146,6 +147,7 @@ def validate_row(
     """Validate and coerce a dict of values against a table schema.
 
     When *partial* is True (used for updates), missing columns are allowed.
+    """
     validated: dict[str, Any] = {}
     known_names = {c.name for c in schema.columns}
 

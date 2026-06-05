@@ -7,6 +7,7 @@ Protocol:
 4. Both sides send DONE when finished.
 
 Wire format: 4-byte big-endian length prefix, then msgpack-encoded message.
+"""
 
 from __future__ import annotations
 
@@ -147,6 +148,7 @@ async def sync_with_peer(
 ) -> int:
     """Connect to a peer and sync all local tables. Returns the number of
     tables synced.
+    """
     reader, writer = await asyncio.open_connection(host, port)
     synced = 0
     try:

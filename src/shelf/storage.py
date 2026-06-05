@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS peers (
     last_sync  TEXT,
     UNIQUE(host, port)
 );
+"""
 
 
 class Storage:
