@@ -1,4 +1,9 @@
-"""CRDT engine: owns the pycrdt Doc lifecycle for each table. Every table is a single pycrdt Doc with two root-level Maps: - "schema": column definitions serialized as JSON strings - "rows":   row data keyed by UUID row IDs"""
+"""CRDT engine: owns the pycrdt Doc lifecycle for each table.
+
+Every table is a single pycrdt Doc with two root-level Maps:
+- "schema": column definitions serialized as JSON strings
+- "rows":   row data keyed by UUID row IDs
+"""
 
 from __future__ import annotations
 
@@ -33,7 +38,11 @@ def create_table_doc(schema: TableSchema) -> Doc:
 
 
 def read_schema(doc: Doc) -> TableSchema:
-    """Reconstruct a TableSchema from the CRDT Doc\'s schema Map. Column order is preserved using the ``__column_order__`` key that ``create_table_doc`` and ``add_column`` maintain."""
+    """Reconstruct a TableSchema from the CRDT Doc's schema Map.
+
+    Column order is preserved using the ``__column_order__`` key that
+    ``create_table_doc`` and ``add_column`` maintain.
+    """
     schema_map: Map = doc["schema"]
     table_name = str(schema_map["__table_name__"])
     order: list[str] = json.loads(str(schema_map["__column_order__"]))
@@ -47,7 +56,10 @@ def read_schema(doc: Doc) -> TableSchema:
 # Row operations
 
 def insert_row(doc: Doc, data: dict[str, Any]) -> str:
-    """Validate *data* against the table schema, then insert a new row. Returns the generated UUID row ID."""
+    """Validate *data* against the table schema, then insert a new row.
+
+    Returns the generated UUID row ID.
+    """
     schema = read_schema(doc)
     validated = validate_row(schema, data)
 
@@ -151,12 +163,15 @@ def load_doc(state: bytes) -> Doc:
 
 
 def get_state_vector(doc: Doc) -> bytes:
-    """Return the Doc\'s state vector (used to compute diffs)."""
+    """Return the Doc's state vector (used to compute diffs)."""
     return doc.get_state()
 
 
 def get_diff_update(doc: Doc, remote_state: bytes) -> bytes:
-    """Compute the binary update that the remote peer is missing. *remote_state* is the state vector received from the remote peer."""
+    """Compute the binary update that the remote peer is missing.
+
+    *remote_state* is the state vector received from the remote peer.
+    """
     return doc.get_update(remote_state)
 
 
@@ -167,4 +182,21 @@ def apply_update(doc: Doc, update: bytes) -> None:
 # Internal helpers
 
 def _to_crdt_value(value: Any) -> Any:
-    """Convert a Python value into something safe to store in a pycrdt Map. pycrdt Maps accept str, int, float, bool, bytes, and nested shared types. We store None as the string "__null__" to avoid issues with missing keys. Complex types (dicts, lists) are stored as JSON strings. if value is None: return "__null__" if isinstance(value, (str, int, float, bool)): return value # Fallback: serialize as JSON return json.dumps(value) def _from_crdt_value(value: Any) -> Any: if value == "__null__": return None return value"""
+    """Convert a Python value into something safe to store in a pycrdt Map.
+
+    pycrdt Maps accept str, int, float, bool, bytes, and nested shared types.
+    We store None as the string "__null__" to avoid issues with missing keys.
+    Complex types (dicts, lists) are stored as JSON strings.
+    """
+    if value is None:
+        return "__null__"
+    if isinstance(value, (str, int, float, bool)):
+        return value
+    # Fallback: serialize as JSON
+    return json.dumps(value)
+
+
+def _from_crdt_value(value: Any) -> Any:
+    if value == "__null__":
+        return None
+    return value
